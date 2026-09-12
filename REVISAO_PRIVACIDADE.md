@@ -76,11 +76,10 @@ O Play Console não foi acessado nem modificado. SEC-09 continua dependente da p
 - **Acessibilidade:** hierarquia semântica, links sublinhados, foco visível de teclado verificado no navegador; seis combinações de cores de texto/fundo verificadas com contraste >= 4,5:1. Não equivale a auditoria com leitor de tela.
 - **Links:** dois destinos HTTPS responderam HTTP 200; `mailto:` preservado e sintaticamente correto. Não foi enviado e-mail nem confirmada operação da caixa postal.
 - **Conteúdo:** sem placeholders ou dados jurídicos inventados. Não foram copiados segredos, tokens ou configurações privadas; os únicos identificadores de acesso apresentados são o escopo público e o contato preexistente.
-- **Data:** 12/09/2026 corresponde à preparação da revisão. Não houve deploy; confirmar/ajustar a data para o dia efetivo da publicação.
+- **Data:** 12/09/2026 corresponde à revisão e à publicação técnica no GitHub Pages realizada nesta rodada.
 
-## Pendências antes da publicação
+## Pendências antes da publicação definitiva
 
-- Ativar o GitHub Pages e verificar por HTTPS a URL final antes de informá-la ao Google Play ou ao aplicativo.
 - Confirmar a aplicabilidade do e-mail preservado ao AulaSnap e definir o público-alvo/Target Audience; a política não estabelece idade mínima.
 - Responsável jurídico/Produto deve avaliar identificação legal, direitos e adequação do texto. A fonte não trazia nome do responsável/controlador, razão social, CNPJ, endereço, telefone ou DPO; nenhum foi inventado. Definir os dados aplicáveis sem inferir identidade jurídica a partir do domínio do e-mail.
 - Conferir Data Safety e comportamento/configuração dos SDKs contra o AAB efetivamente distribuído pelo Google Play, com atenção a Google Sign-In, Drive, ML Kit, DataTransport, identificadores técnicos, diagnósticos, informações de dispositivo/aplicativo e transmissões iniciadas pelo usuário. Testes reais de Drive/revogação/App Links/OEM permanecem os da revisão 19.
@@ -95,7 +94,7 @@ Após a revisão inicial, a pasta passou a ter Git configurado com o remoto `htt
 
 - **Identidade visual:** a cor primária azul `#2563eb` foi substituída pela cor do AulaSnap `#6750E8`; fundo, borda e texto do destaque foram adaptados para a mesma família visual, preservando contraste WCAG AA e foco visível.
 - **Texto interno do aplicativo:** a tela Dados e privacidade agora informa que conectar a Conta Google não envia o caderno automaticamente e que tanto backups quanto compartilhamentos podem enviar conteúdo ao Google Drive somente por ação explícita. O aviso de exclusão também esclarece que backups e compartilhamentos remotos permanecem no Drive.
-- **Hospedagem estática:** adicionados `.nojekyll` e `index.html`. O índice fornece link acessível e redirecionamento estático para `privacy-policy.html`, sem JavaScript, framework ou dependência.
+- **Hospedagem estática:** adicionados `.nojekyll` e `index.html`. O índice fornece link acessível e redirecionamento estático para `privacy-policy.html`, sem JavaScript, framework ou dependência. O GitHub Pages foi ativado na branch `master`, raiz `/`, com HTTPS obrigatório.
 - **Consistência:** política e aplicativo descrevem estudo local por padrão, Drive opcional, ausência de sincronização automática e independência entre dados locais e cópias remotas.
 - **Privacidade de crianças:** removida a afirmação não aprovada de que o aplicativo não é direcionado a crianças. A redação pública ficou neutra e não cria idade mínima.
 
@@ -103,7 +102,6 @@ Após a revisão inicial, a pasta passou a ter Git configurado com o remoto `htt
 
 - **PENDÊNCIA DE PRODUTO:** definir público-alvo/Target Audience do AulaSnap e validar a seção “Privacidade de crianças”.
 - **PENDÊNCIA DE PRODUTO/JURÍDICA:** definir quais dados de identificação do responsável/controlador devem constar na política pública. O e-mail preexistente `suporte@dmbsoftware.com.br` foi mantido; razão social, CNPJ, endereço, telefone, pessoa física e DPO não foram inventados.
-- Ativar o GitHub Pages nas configurações do repositório, usando a branch `master` e a raiz `/`, e verificar a publicação. A URL esperada pela convenção do GitHub Pages é `https://dgmorais.github.io/AulaSnap/`, com a política em `https://dgmorais.github.io/AulaSnap/privacy-policy.html`; ela somente deve ser tratada como oficial após responder por HTTPS e ser confirmada pelo responsável.
 - Fazer a conferência final do Data Safety contra o AAB efetivamente distribuído pelo Google Play. A matriz técnica deste relatório auxilia a revisão, mas não preenche nem determina respostas do formulário.
 - Obter revisão do responsável e revisão jurídica antes da publicação definitiva. Enquanto essas dependências externas permanecerem abertas, **SEC-09 não está totalmente resolvido**.
 
@@ -113,6 +111,7 @@ Após a revisão inicial, a pasta passou a ter Git configurado com o remoto `htt
 - Chromium/Playwright confirmou título, `h1`, ausência de erros de página, foco de teclado visível, redirecionamento do índice e ausência de overflow horizontal em 320, 360, 390, 640, 768 e 1280 px; texto a 200% também permaneceu sem overflow.
 - As seis combinações de texto/fundo verificadas ficaram entre 4,70:1 e 16,27:1, atendendo ao contraste WCAG AA para texto normal.
 - Os dois links HTTPS externos responderam HTTP 200. O link de e-mail foi preservado e não foi acionado.
+- O GitHub Pages informou estado `built`, HTTPS obrigatório e origem `master`/`/`. A URL raiz e `https://dgmorais.github.io/AulaSnap/privacy-policy.html` responderam HTTP 200; Chromium confirmou o redirecionamento público, título, `h1`, ausência de PlantOn e a cor primária `#6750E8` no artefato publicado.
 - O HTML não contém `PlantOn`, placeholders, `TODO` ou a antiga cor `#2563eb`.
 - No aplicativo, `flutter analyze` passou sem problemas e `flutter test test/data_privacy_test.dart` passou com 16 testes. O teste foi atualizado para validar o novo texto e para rolar até o botão de exclusão em vez de depender da altura anterior do conteúdo.
 - `git diff --check` passou nos dois repositórios. Nenhum segredo, keystore, credencial OAuth ou arquivo local foi incluído nas alterações.
