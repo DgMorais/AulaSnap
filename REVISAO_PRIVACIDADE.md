@@ -33,7 +33,7 @@ Preservados cores, cartões, tipografia, estrutura responsiva e contato `suporte
 | Internet | OAuth, Drive, recebimento e infraestrutura SDK; dependências consultam conexão; caderno local não depende continuamente de rede. |
 | Terceiros | Google Sign-In, Drive, ML Kit, serviços Android e DataTransport; possível processamento/transmissão técnica conforme versão/configuração/política. Sem equiparar ML Kit a Analytics/AdMob ou declarar toda coleta possível como efetiva. |
 | Logs | Eventos/categorias sanitizados; sem registro deliberado de senhas, tokens, Authorization, notas integrais, bytes ou credenciais; sem serviço próprio de coleta; diagnósticos de SDK separados. |
-| IA/publicidade | IA pública indisponível na V1; nenhum provedor experimental apresentado como ativo; publicidade não disponibilizada na versão atual. Revisão antes de futuras mudanças. |
+| IA/publicidade | IA pública indisponível na V1. Google Mobile Ads e UMP integram a V1 exclusivamente para App Open Ad; conteúdo de estudo não é acrescentado manualmente ao `AdRequest`. |
 | Exclusão | Conteúdo local, backup remoto, compartilhamento e cópias externas tratados separadamente; logout/desinstalação não apagam Drive; desinstalação normalmente remove armazenamento privado. |
 | Segurança/direitos | Medidas concretas de armazenamento/validação/HTTPS, sem segurança absoluta ou promessa de criptografia; direitos quando aplicáveis e limitação de acesso remoto ao caderno local. |
 
@@ -44,7 +44,7 @@ Consultados no aplicativo: `docs/security_review_19.md`, `docs/architecture.md`,
 1. `data_privacy_screen.dart:93` dizia que **somente backups manuais** eram copiados ao Drive. A rodada de preparação para publicação corrigiu o texto e o teste no repositório do aplicativo para incluir compartilhamentos iniciados pelo usuário, sem alterar o comportamento.
 2. A antiga política dizia que o aplicativo não é direcionado a crianças e justificava uso por profissionais de plantões. Na rodada de preparação para publicação, a afirmação ainda não aprovada foi substituída por uma redação neutra: a política não estabelece idade mínima e remete a definição do público-alvo aos canais oficiais de distribuição. Nenhuma idade foi inventada. **PENDÊNCIA DE PRODUTO: definir público-alvo/Target Audience do AulaSnap e validar a seção “Privacidade de crianças” antes da publicação final.**
 3. O backup não inclui favoritos/revisão/preferências: a política distingue dados locais do conteúdo efetivamente enviado. “Completo” não é snapshot do aplicativo.
-4. Não foi encontrada evidência de publicidade ativa do AulaSnap; a declaração AdMob do PlantOn foi removida.
+4. A revisão 22.4 substituiu o estado histórico sem publicidade: Google Mobile Ads e UMP agora fazem parte do artefato, exclusivamente para App Open Ad.
 
 ## Conferência técnica para Data Safety
 
@@ -116,3 +116,33 @@ Após a revisão inicial, a pasta passou a ter Git configurado com o remoto `htt
 - No aplicativo, `flutter analyze` passou sem problemas e `flutter test test/data_privacy_test.dart` passou com 16 testes. O teste foi atualizado para validar o novo texto e para rolar até o botão de exclusão em vez de depender da altura anterior do conteúdo.
 - `git diff --check` passou nos dois repositórios. Nenhum segredo, keystore, credencial OAuth ou arquivo local foi incluído nas alterações.
 - Não existe etapa de build para o site estático. O aplicativo não foi compilado porque a alteração é apenas textual; análise e teste de widget cobriram o escopo alterado.
+
+## Rodada 22.4 — Google Mobile Ads e UMP
+
+Baseline desta rodada: `74a675e3b144a246bfd384d6821fa83c208e89b2`.
+A política foi sincronizada com o AAB pós-AdMob:
+
+- removida a afirmação de que a versão atual não disponibiliza publicidade;
+- documentado o uso exclusivo de App Open Ad na abertura, sem banners,
+  rewarded, native ou inserção manual entre telas de estudo;
+- descritos Google Mobile Ads e UMP, incluindo escolhas que dependem de região,
+  regras e configuração do Google;
+- descritos IP, interações, diagnósticos e identificadores do dispositivo/conta
+  conforme a divulgação oficial do Google Mobile Ads, além de publicidade,
+  analytics do serviço, prevenção de fraude/abuso e funcionamento técnico;
+- esclarecido que o SDK se comunica diretamente com o Google, sem backend
+  próprio de anúncios;
+- reafirmado que notas, fotos, PDFs, aulas, disciplinas, pesquisas e mapa de
+  conhecimento não são adicionados manualmente ao `AdRequest`;
+- preservadas a redação neutra sobre crianças e a pendência formal de
+  público-alvo; nenhuma idade, entidade legal ou base jurídica foi inventada;
+- preservada a data real de 12/09/2026 e a aplicabilidade à versão 1.x.
+
+Fontes: [divulgação do Google Mobile Ads](https://developers.google.com/admob/android/privacy/play-data-disclosure),
+[UMP Flutter](https://developers.google.com/ad-manager/mobile-ads-sdk/flutter/privacy)
+e [Política de Dados do Usuário](https://support.google.com/googleplay/android-developer/answer/10144311).
+
+Continuam pendentes a revisão jurídica, identificação legal do responsável,
+decisão de público-alvo/infantil, mensagem UMP publicada, Data Safety enviado e
+conferência final no Play Console. Este documento não afirma que esses itens
+externos foram concluídos.
