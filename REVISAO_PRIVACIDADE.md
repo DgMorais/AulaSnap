@@ -41,8 +41,8 @@ Preservados cores, cartões, tipografia, estrutura responsiva e contato `suporte
 
 Consultados no aplicativo: `docs/security_review_19.md`, `docs/architecture.md`, `docs/google_drive.md`, `docs/google_drive_setup_android.md`, `docs/aulasnap_package_v7.md`, `docs/ai_experimental.md`; manifest Android atual; implementação de escopos/conta/logout em `google_auth_service.dart`; gate `release_features.dart`; logs `security_diagnostics.dart`; tela `data_privacy_screen.dart`. A auditoria documenta o manifest merged release e ML Kit/DataTransport; não foi produzido novo artefato Android nesta tarefa.
 
-1. `data_privacy_screen.dart:93` ainda diz que **somente backups manuais** são copiados ao Drive. O código/documentação também permitem compartilhamento. Divergência relatada, sem alterar o app.
-2. A antiga política dizia que o aplicativo não é direcionado a crianças e justificava uso por profissionais de plantões. Foi preservada a regra de não direcionamento, conforme instrução, removida a justificativa incompatível e não criada idade mínima. **Produto deve confirmar essa regra para o AulaSnap antes da publicação.**
+1. `data_privacy_screen.dart:93` dizia que **somente backups manuais** eram copiados ao Drive. A rodada de preparação para publicação corrigiu o texto e o teste no repositório do aplicativo para incluir compartilhamentos iniciados pelo usuário, sem alterar o comportamento.
+2. A antiga política dizia que o aplicativo não é direcionado a crianças e justificava uso por profissionais de plantões. Na rodada de preparação para publicação, a afirmação ainda não aprovada foi substituída por uma redação neutra: a política não estabelece idade mínima e remete a definição do público-alvo aos canais oficiais de distribuição. Nenhuma idade foi inventada. **PENDÊNCIA DE PRODUTO: definir público-alvo/Target Audience do AulaSnap e validar a seção “Privacidade de crianças” antes da publicação final.**
 3. O backup não inclui favoritos/revisão/preferências: a política distingue dados locais do conteúdo efetivamente enviado. “Completo” não é snapshot do aplicativo.
 4. Não foi encontrada evidência de publicidade ativa do AulaSnap; a declaração AdMob do PlantOn foi removida.
 
@@ -80,12 +80,40 @@ O Play Console não foi acessado nem modificado. SEC-09 continua dependente da p
 
 ## Pendências antes da publicação
 
-- Confirmar hospedagem e URL pública, publicar o HTML e verificar a URL final.
-- Confirmar a aplicabilidade do e-mail preservado ao AulaSnap e a regra sobre crianças herdada do PlantOn.
+- Ativar o GitHub Pages e verificar por HTTPS a URL final antes de informá-la ao Google Play ou ao aplicativo.
+- Confirmar a aplicabilidade do e-mail preservado ao AulaSnap e definir o público-alvo/Target Audience; a política não estabelece idade mínima.
 - Responsável jurídico/Produto deve avaliar identificação legal, direitos e adequação do texto. A fonte não trazia nome do responsável/controlador, razão social, CNPJ, endereço, telefone ou DPO; nenhum foi inventado. Definir os dados aplicáveis sem inferir identidade jurídica a partir do domínio do e-mail.
-- Conferir Data Safety e comportamento/configuração dos SDKs na versão efetivamente distribuída, incluindo retenção e diagnósticos; testes reais de Drive/revogação/App Links/OEM permanecem os da revisão 19.
-- Integrar a entrega ao repositório web correto e criar o commit sugerido. Não inicializado repositório novo sem necessidade nem criado commit no repositório do aplicativo, que está fora do escopo.
+- Conferir Data Safety e comportamento/configuração dos SDKs contra o AAB efetivamente distribuído pelo Google Play, com atenção a Google Sign-In, Drive, ML Kit, DataTransport, identificadores técnicos, diagnósticos, informações de dispositivo/aplicativo e transmissões iniciadas pelo usuário. Testes reais de Drive/revogação/App Links/OEM permanecem os da revisão 19.
 
 ## Continuação — versionamento autorizado
 
 Após a revisão inicial, a pasta passou a ter Git configurado com o remoto `https://github.com/DgMorais/AulaSnap.git`, inicialmente sem branches publicados. O usuário autorizou commit e push dos dois arquivos entregues. As observações anteriores sobre ausência de Git descrevem o estado encontrado durante a revisão inicial. O envio ao GitHub não comprova publicação da página em uma hospedagem.
+
+## Rodada de preparação para publicação
+
+### Corrigido
+
+- **Identidade visual:** a cor primária azul `#2563eb` foi substituída pela cor do AulaSnap `#6750E8`; fundo, borda e texto do destaque foram adaptados para a mesma família visual, preservando contraste WCAG AA e foco visível.
+- **Texto interno do aplicativo:** a tela Dados e privacidade agora informa que conectar a Conta Google não envia o caderno automaticamente e que tanto backups quanto compartilhamentos podem enviar conteúdo ao Google Drive somente por ação explícita. O aviso de exclusão também esclarece que backups e compartilhamentos remotos permanecem no Drive.
+- **Hospedagem estática:** adicionados `.nojekyll` e `index.html`. O índice fornece link acessível e redirecionamento estático para `privacy-policy.html`, sem JavaScript, framework ou dependência.
+- **Consistência:** política e aplicativo descrevem estudo local por padrão, Drive opcional, ausência de sincronização automática e independência entre dados locais e cópias remotas.
+- **Privacidade de crianças:** removida a afirmação não aprovada de que o aplicativo não é direcionado a crianças. A redação pública ficou neutra e não cria idade mínima.
+
+### Ainda pendente
+
+- **PENDÊNCIA DE PRODUTO:** definir público-alvo/Target Audience do AulaSnap e validar a seção “Privacidade de crianças”.
+- **PENDÊNCIA DE PRODUTO/JURÍDICA:** definir quais dados de identificação do responsável/controlador devem constar na política pública. O e-mail preexistente `suporte@dmbsoftware.com.br` foi mantido; razão social, CNPJ, endereço, telefone, pessoa física e DPO não foram inventados.
+- Ativar o GitHub Pages nas configurações do repositório, usando a branch `master` e a raiz `/`, e verificar a publicação. A URL esperada pela convenção do GitHub Pages é `https://dgmorais.github.io/AulaSnap/`, com a política em `https://dgmorais.github.io/AulaSnap/privacy-policy.html`; ela somente deve ser tratada como oficial após responder por HTTPS e ser confirmada pelo responsável.
+- Fazer a conferência final do Data Safety contra o AAB efetivamente distribuído pelo Google Play. A matriz técnica deste relatório auxilia a revisão, mas não preenche nem determina respostas do formulário.
+- Obter revisão do responsável e revisão jurídica antes da publicação definitiva. Enquanto essas dependências externas permanecerem abertas, **SEC-09 não está totalmente resolvido**.
+
+### Validação desta rodada
+
+- `html-validate 11.15.0` passou em `privacy-policy.html` e `index.html`, sem erros ou avisos.
+- Chromium/Playwright confirmou título, `h1`, ausência de erros de página, foco de teclado visível, redirecionamento do índice e ausência de overflow horizontal em 320, 360, 390, 640, 768 e 1280 px; texto a 200% também permaneceu sem overflow.
+- As seis combinações de texto/fundo verificadas ficaram entre 4,70:1 e 16,27:1, atendendo ao contraste WCAG AA para texto normal.
+- Os dois links HTTPS externos responderam HTTP 200. O link de e-mail foi preservado e não foi acionado.
+- O HTML não contém `PlantOn`, placeholders, `TODO` ou a antiga cor `#2563eb`.
+- No aplicativo, `flutter analyze` passou sem problemas e `flutter test test/data_privacy_test.dart` passou com 16 testes. O teste foi atualizado para validar o novo texto e para rolar até o botão de exclusão em vez de depender da altura anterior do conteúdo.
+- `git diff --check` passou nos dois repositórios. Nenhum segredo, keystore, credencial OAuth ou arquivo local foi incluído nas alterações.
+- Não existe etapa de build para o site estático. O aplicativo não foi compilado porque a alteração é apenas textual; análise e teste de widget cobriram o escopo alterado.
